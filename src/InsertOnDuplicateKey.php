@@ -2,7 +2,7 @@
 
 namespace Yadakhov;
 
-use Illuminate\Support\Facades\DB;
+use Illuminate\Database\Capsule\Manager as DB;
 
 trait InsertOnDuplicateKey
 {
@@ -96,8 +96,9 @@ trait InsertOnDuplicateKey
     public static function getTableName()
     {
         $class = get_called_class();
+        $connection = DB::connection(static::getModelConnectionName());
 
-        return (new $class())->getTable();
+        return $connection->getTablePrefix().(new $class())->getTable();
     }
 
     /**
